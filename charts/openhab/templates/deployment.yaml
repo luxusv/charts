@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openhab.fullname" . }}
+  labels:
+    {{- include "openhab.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "openhab.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openhab.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openhab.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          # command:
+          # - /bin/sh
+          # - -c
+          # - >-
+          #   while true; do echo "1" > /dev/null; sleep 30; done
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "EXTRA_JAVA_OPTS"
+              value: "-Duser.timezone={{ .Values.openhab.timezone }}"
+          volumeMounts:
+          - name: openhab-entrypoint
+            mountPath: /entrypoint
+            subPath: entrypoint
+            readOnly: true
+          {{- if .Values.volumeMounts }}
+            {{- toYaml .Values.volumeMounts | nindent 10}}
+          {{- end }}
+          - name: etc-localtime
+            mountPath: /etc/localtime
+            readOnly: true
+          {{- range .Values.persistence }}
+          {{- if .enabled }}
+          - name: openhab-{{ .name }}
+            mountPath: /openhab/{{ .name }}
+            readOnly: false
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: openhab-entrypoint
+          configMap:
+            name: {{ .Release.Name }}-entrypoint
+            defaultMode: 0555
+            items:
+              - key: entrypoint
+                path: entrypoint
+        {{- if .Values.volumes }}
+          {{- .toYaml .Values.volumes | nindent 8 }}
+        {{- end }}
+        - name: etc-localtime
+          hostPath:
+            path: "/usr/share/zoneinfo/{{ .Values.openhab.timezone }}"
+        {{- range .Values.persistence }}
+        - name: openhab-{{ .name }}
+          {{- if .enabled }}
+          {{- if .existingClaim }}
+          persistentColumeClaim:
+            claimName: {{ .existingClaim }}
+          {{- else if .claim.create }}
+          persistentVolumeClaim:
+            claimName: "{{ include "openhab.fullname" $ }}-{{ .name }}"
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 300

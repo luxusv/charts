@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-entrypoint
+  labels:
+    {{ include "openhab.labels" . | nindent 4 }}
+data:
+  entrypoint: |+
+{{ .Files.Get "files/entrypoint" | indent 4 }}
