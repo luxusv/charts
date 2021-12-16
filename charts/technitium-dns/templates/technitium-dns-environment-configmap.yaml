@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Release.Name }}-environment-configmap
-  labels:
-    {{ include "technitium-dns.labels" . | nindent 4 }}
-data:
-{{ toYaml .Values.technitium.env | nindent 4}}
