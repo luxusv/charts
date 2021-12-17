@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  openhab:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-12-17T10:43:19.592956008Z"
+    description: A Helm chart for Kubernetes
+    digest: 35a0ffdd73c31008b22d62d82ae23175e655cbc30489d3730c042a6206c45f38
+    name: openhab
+    type: application
+    urls:
+    - https://github.com/luxusv/charts/releases/download/openhab-0.1.0/openhab-0.1.0.tgz
+    version: 0.1.0
+  technitium-dns:
+  - apiVersion: v2
+    appVersion: "7.1"
+    created: "2021-12-17T10:43:19.707451576Z"
+    description: A Helm chart for Kubernetes
+    digest: 301d2f1a753a673b1066a370874610c08e697348b58ea74d1734f7f1a6ef533b
+    name: technitium-dns
+    type: application
+    urls:
+    - https://github.com/luxusv/charts/releases/download/technitium-dns-0.1.1/technitium-dns-0.1.1.tgz
+    version: 0.1.1
+generated: "2021-12-17T10:43:19.707464077Z"
