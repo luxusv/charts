@@ -77,7 +77,7 @@ spec:
             claimName: {{ .Values.persistence.existingClaim }}
         {{- else if .Values.persistence.claim.create }}
           persistentVolumeClaim:
-            claimName: {{ include "rundeck.fullname" . }}
+            claimName: {{ include "technitium-dns.fullname" . }}
         {{- end }}
         {{- else }}
           emptyDir: {}
