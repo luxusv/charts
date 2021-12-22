@@ -14,6 +14,16 @@ entries:
   technitium-dns:
   - apiVersion: v2
     appVersion: "7.1"
+    created: "2021-12-22T13:54:20.72018465Z"
+    description: A Helm chart for Kubernetes
+    digest: 3684375f3f5081eaece8dbd14cec5a491b505fccf74617e710d051c0c20b9ef4
+    name: technitium-dns
+    type: application
+    urls:
+    - https://github.com/luxusv/charts/releases/download/technitium-dns-0.1.4/technitium-dns-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: "7.1"
     created: "2021-12-18T22:22:43.386940172Z"
     description: A Helm chart for Kubernetes
     digest: 569c475772e570452d7b49ea11bdf0680a4a68620183a53464f00179f3f2f3a4
@@ -42,4 +52,4 @@ entries:
     urls:
     - https://github.com/luxusv/charts/releases/download/technitium-dns-0.1.1/technitium-dns-0.1.1.tgz
     version: 0.1.1
-generated: "2021-12-18T22:22:43.386952972Z"
+generated: "2021-12-22T13:54:20.72019915Z"
