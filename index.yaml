@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   l4d2:
   - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2021-12-28T15:50:18.974963331Z"
+    description: A Helm chart for Kubernetes
+    digest: 805131d2e856b7042a63f9ae789de6f6354dd6e26fb966ffd1c12dfd2f18bb74
+    name: l4d2
+    type: application
+    urls:
+    - https://github.com/luxusv/charts/releases/download/l4d2-0.1.4/l4d2-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-12-28T15:14:23.339753767Z"
     description: A Helm chart for Kubernetes
@@ -93,4 +103,4 @@ entries:
     urls:
     - https://github.com/luxusv/charts/releases/download/technitium-dns-0.1.1/technitium-dns-0.1.1.tgz
     version: 0.1.1
-generated: "2021-12-28T15:14:23.340113458Z"
+generated: "2021-12-28T15:50:18.974990032Z"
