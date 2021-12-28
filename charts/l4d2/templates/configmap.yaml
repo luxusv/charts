@@ -6,6 +6,6 @@ metadata:
     {{ include "l4d2.labels" . | nindent 4 }}
 data:
   admins_simple.ini: |+
-{{ tpl (.Files.Get "file_templates/admins_simple.ini") | indent 4 }}
+{{ tpl (.Files.Get "file_templates/admins_simple.ini") . | indent 4 }}
   server.cfg: |
-{{ tpl (.Files.Get "file_templates/server.cfg") | indent 4 }}
+{{ tpl (.Files.Get "file_templates/server.cfg") . | indent 4 }}
