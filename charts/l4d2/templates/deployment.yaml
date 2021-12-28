@@ -53,21 +53,24 @@ spec:
               port: rcon
             tcpSocket:
               port: l4d2-tcp
+            initialDelaySeconds: 100
           readinessProbe:
             tcpSocket:
               port: rcon
             tcpSocket:
               port: l4d2-tcp
+            initialDelaySeconds: 90
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: l4d2-config
-          configmap: {{ .Release.Name }}-configmap
-          items:
-            - key: admins_simple.ini
-              path: admins_simple.ini
-            - key: server.cfg
-              path: server.cfg
+          configMap:
+            name: {{ .Release.Name }}-configmap
+            items:
+              - key: admins_simple.ini
+                path: admins_simple.ini
+              - key: server.cfg
+                path: server.cfg
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
