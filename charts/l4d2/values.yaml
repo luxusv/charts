@@ -17,14 +17,14 @@ l4d2:
       permissions: "99:z"
       #password:
 
-  config:
-    hostname: "Kerstlan - Kuteditie v2"
-    rcon_password: "nietzobitches"
-    steamgroup: "11604979"
-    search_key: "kerslan"
-    tags: "Kerslan"
-    steamgroup_exclusive: 1
-    allow_lobby_connect_only: 0
+  config: {}
+    # hostname: ""
+    # rcon_password: ""
+    # steamgroup: ""
+    # search_key: ""
+    # tags: ""
+    # steamgroup_exclusive: 0
+    # allow_lobby_connect_only: 0
 
 
 imagePullSecrets: []
