@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "l4d2.fullname" . }}
+  labels:
+    {{- include "l4d2.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: rcon
+      protocol: TCP
+      name: rcon
+    - port: {{ .Values.l4d2.port }}
+      targetPort: l4d2-tcp
+      protocol: TCP
+      name: l4d2-tcp
+    - port: {{ .Values.l4d2.port }}
+      targetPort: l4d2-udp
+      protocol: UDP
+      name: l4d2-udp
+  selector:
+    {{- include "l4d2.selectorLabels" . | nindent 4 }}

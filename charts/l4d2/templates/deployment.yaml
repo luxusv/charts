@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "l4d2.fullname" . }}
+  labels:
+    {{- include "l4d2.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "l4d2.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "l4d2.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "l4d2.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: l4d2-config
+              subPath: admins_simple.ini
+              mountPath: /home/steam/l4d2-dedicated/left4dead2/addons/sourcemod/configs/admins_simple.ini
+            - name: l4d2-config
+              subPath: server.cfg
+              mountPath: /home/steam/l4d2-dedicated/left4dead2/cfg/server.cfg
+          ports:
+            - name: rcon
+              containerPort: 10101
+              protocol: TCP
+            - name: l4d2-tcp
+              containerPort: {{ .Values.l4d2.port }}
+              protocol: TCP
+            - name: l4d2-udp
+              containerPort: {{ .Values.l4d2.port }}
+              protocol: UDP
+          livenessProbe:
+            tcpSocket:
+              port: rcon
+            tcpSocket:
+              port: l4d2-tcp
+          readinessProbe:
+            tcpSocket:
+              port: rcon
+            tcpSocket:
+              port: l4d2-tcp
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: l4d2-config
+          configmap: {{ .Release.Name }}-configmap
+          items:
+            - key: admins_simple.ini
+              path: admins_simple.ini
+            - key: server.cfg
+              path: server.cfg
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
